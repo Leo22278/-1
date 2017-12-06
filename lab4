@@ -1,0 +1,118 @@
+实验四 Web服务器端编程
+
+实验目的
+  1 掌握基本Web服务器端的编程模式
+  2 深入理解客户端与服务器端的信息交互模式
+
+实验内容
+  1 自定义一个位于服务器端具有10个元素的<帐号，口令字>对；
+  2 编写客户端代码，定义一个表单，在客户端实现帐号/口令字的输入并传送到服务器；
+  3 编写服务器端代码，接收来自客户端输入的<帐号，口令字>，若<帐号，口令字>对存在，则：
+  (1)完成生成一个会话ID，该会话ID值为口令字的MD5值；
+  (2)会话ID通过cookie来传递；
+  (3)返回“登录成功，欢迎 <帐号>”的信息。
+否则返回“登录不成功，输入信息有误”的信息。
+  4 开启Webscarab，截屏记录能够反映实验过程的数据，并写入实验报告。
+<!DOCTYPE HTML> 
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜鸟教程(runoob.com)</title>
+<style>
+.error {color: #FF0000;}
+</style>
+</head>
+<body> 
+
+<?php
+// 定义变量并默认设为空值
+$nameErr = $emailErr = $genderErr = $websiteErr = "";
+$name = $email = $gender = $comment = $website = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+   if (empty($_POST["name"])) {
+      $nameErr = "名字是必须的。";
+   } else {
+      $name = test_input($_POST["name"]);
+   }
+
+   if (empty($_POST["email"])) {
+      $emailErr = "邮箱是必须的。";
+   } else {
+      $email = test_input($_POST["email"]);
+   }
+
+   if (empty($_POST["website"])) {
+      $website = "";
+   } else {
+      $website = test_input($_POST["website"]);
+   }
+
+   if (empty($_POST["comment"])) {
+      $comment = "";
+   } else {
+      $comment = test_input($_POST["comment"]);
+   }
+
+   if (empty($_POST["gender"])) {
+      $genderErr = "性别是必须的。";
+   } else {
+      $gender = test_input($_POST["gender"]);
+   }
+}
+
+function test_input($data) {
+   $data = trim($data);
+   $data = stripslashes($data);
+   $data = htmlspecialchars($data);
+   return $data;
+}
+?>
+
+<h2>PHP 表单验证实例</h2>
+<p><span class="error">* 必填字段。</span></p>
+<form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>"> 
+   名字: <input type="text" name="name">
+   <span class="error">* <?php echo $nameErr;?></span>
+   <br><br>
+   E-mail: <input type="text" name="email">
+   <span class="error">* <?php echo $emailErr;?></span>
+   <br><br>
+   网址: <input type="text" name="website">
+   <span class="error"><?php echo $websiteErr;?></span>
+   <br><br>
+   备注: <textarea name="comment" rows="5" cols="40"></textarea>
+   <br><br>
+   性别:
+   <input type="radio" name="gender" value="female">女
+   <input type="radio" name="gender" value="male">男
+   <span class="error">* <?php echo $genderErr;?></span>
+   <br><br>
+   <input type="submit" name="submit" value="Submit"> 
+</form>
+
+<?php
+echo "<h2>您的输入:</h2>";
+echo $name;
+echo "<br>";
+echo $email;
+echo "<br>";
+echo $website;
+echo "<br>";
+echo $comment;
+echo "<br>";
+echo $gender;
+?>
+
+</body>
+</html>
+实验要求
+   1 独立完成
+   2 纸质版提交日期：2017年12月7日下午4点
+   3 电子版提交日期：2017年12月7日下午4点
+   4 电子版本要求：
+（1）	包含实现客户端、服务器端的实现代码
+（2）	实验报告
+（3）	打包成一个zip或rar压缩文件，发送至
+ytang.bjs@139.com
+（4）	压缩文件命名：学号_姓名_lab4
